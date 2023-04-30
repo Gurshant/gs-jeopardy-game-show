@@ -47,8 +47,18 @@ class Poll():
 
         if center_input == 0:
             print('ADMIN: Console button 2 has been pressed')
+#            
+            gpio.output(5, gpio.LOW)
+            time.sleep(1.5)
+            gpio.output(5, gpio.HIGH)
+            time.sleep(1)
+
+            gpio.output(5, gpio.LOW)
+            time.sleep(1.5)
+            gpio.output(5, gpio.HIGH)
+            self.first = 1
         else:
-            print('not pressed')
+            pass
 
 
 #         if center_input == True:
@@ -58,7 +68,7 @@ class Poll():
 #         if self.center_press == 0:
 #             print('ADMIN: Console button 2 has been pressed')
                 
-# #                 self.first = 1
+#                 self.first = 1
 #             gpio.output(5, gpio.LOW)
 #             time.sleep(1)
 #             gpio.output(5, gpio.HIGH)
