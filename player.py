@@ -1,8 +1,9 @@
 import RPi.GPIO as gpio
 
 class Player():
-    def __init__(self, button, light):
+    def __init__(self, name, button, light):
         gpio.setmode(gpio.BCM)
+        self.name = name
 
         #Setup pins and board
         self.button_pin = button
