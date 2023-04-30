@@ -1,33 +1,33 @@
 import RPi.GPIO as gpio
 import time
+import player
 
-class Poll():
+class Game():
     def __init__(self):
-        self.DEBUG = True
-
         #Setup pins and board
         gpio.setmode(gpio.BCM)
-        # Input high by default
-        gpio.setup(4, gpio.IN, pull_up_down=gpio.PUD_UP)
+
+        p1 = player.Player(4,5)
+        p2 = player.Player(20,6)
+        p3 = player.Player(21,7)
+        p4 = player.Player(22,8)
+
+        # gpio.setup(pins.P1_BUTTON, gpio.IN, pull_up_down=gpio.PUD_UP)
  
-        gpio.setup(5, gpio.OUT)
-        gpio.output(5, gpio.HIGH)
+        # gpio.setup(pins.P1_LIGHT, gpio.OUT)
+        # gpio.output(pins.P1_LIGHT, gpio.HIGH)
 
         #Put pins in variables
-        self.center_button = 4
+        # self.center_button = pins.P1_BUTTON
         
         self.first = ''
 
-        self.center_press = 1
 
     def reset(self):
         self.first = ''
-
-        self.center_press = 1
         
-    def poll(self): #Returns first button pressed
+    def game(self): #Returns first button pressed
         #Variables for press count (one for each button)
-        self.center_press = 1
 #         self.right_press = 0
 #         self.left_press = 0
 
@@ -40,7 +40,7 @@ class Poll():
         return self.first
 
     def check(self):
-        center_input = gpio.input(self.center_button)
+        center_input = gpio.input(self.p1.button_pin)
         print('center_input')
 
         print(center_input)
@@ -49,23 +49,25 @@ class Poll():
             print('ADMIN: Console button 2 has been pressed')
 #            
             gpio.output(5, gpio.LOW)
+            self.p1.light_on
             time.sleep(1.5)
-            gpio.output(5, gpio.HIGH)
+            self.p1.light_off
+            # gpio.output(5, gpio.HIGH)
             time.sleep(1)
+            self.p1.light_on
 
-            gpio.output(5, gpio.LOW)
+            # gpio.output(5, gpio.LOW)
             time.sleep(1.5)
-            gpio.output(5, gpio.HIGH)
+            self.p1.light_off
+
+            # gpio.output(5, gpio.HIGH)
             self.first = 1
         else:
             pass
 
 
 #         if center_input == True:
-#         print('center_press')
 
-#         print(self.center_press)
-#         if self.center_press == 0:
 #             print('ADMIN: Console button 2 has been pressed')
                 
 #                 self.first = 1
@@ -77,12 +79,11 @@ class Poll():
 #             pass
 #             print('ADMIN: Console button 2 has been pressed')
 
-#         self.center_press += 1
 
         return self.first
 
 if __name__ == '__main__':
-    test = Poll()
+    test = Game()
     test.poll()
     gpio.cleanup()
 #     while True:
