@@ -9,7 +9,6 @@ class Player():
         self.button_pin = button
         self.light_pin = light
 
-        gpio.setmode(gpio.BCM)
         gpio.setup(self.button_pin, gpio.IN, pull_up_down=gpio.PUD_UP)
         #TODO Combine these two lines under if possible
         gpio.setup(self.light_pin, gpio.OUT)

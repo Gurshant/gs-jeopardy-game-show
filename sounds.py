@@ -15,7 +15,7 @@ def incorrect():
     threading.Thread( target=play_sound, args=('buzzer_pressed.wav',) ).start()
 
 def buzzer():
-    t1 = threading.Thread( target=play_sound, args=('buzzer_pressed.wav',) ).start()
+    threading.Thread( target=play_sound, args=('buzzer_pressed.wav',) ).start()
     # t1.join()
 
 

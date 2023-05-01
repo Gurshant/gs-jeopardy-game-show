@@ -14,18 +14,9 @@ class Game():
 
     def reset(self):
         self.winner = ''
-        
-    def game(self): #Returns first button pressed
-
-        #Check for button presses
-        while True:
-            self.winner = self.check()
-            if self.winner != '':
-                break
-        return self.winner
 
     def check(self):
-        print('running')
+#         if button already enables
         if self.is_button_clicked(self.p1):
             self.winner = '1'
         elif self.is_button_clicked(self.p2):
@@ -36,23 +27,30 @@ class Game():
 #             self.winner = '4'
         else:
             pass
+        
+        print('still?')
 
         return self.winner
 
     def is_button_clicked(self, player):
         if player.input_from_button() == 0:
 #             start threads
-            sounds.buzzer()
-            t2 = threading.Thread( target=self.turn_light_on, args=(player,))
-            t2.start()
-
+            for th in threading.enumerate():
+                print(th.name)
+                if th.name == 'button':
+                    print("Thread still running")
+                    return False
+            
+            self.button_thread = threading.Thread( target=self.button_clicked, args=(player, ), name='button').start()
 #             wait for thread execution
-            t2.join()
             
             return True
         else:
             return False
-        
+    def button_clicked(self, player):
+        sounds.buzzer()
+        self.turn_light_on(player)
+
     def turn_light_on(self, player):
         player.light_on()
         time.sleep(3)
@@ -69,8 +67,6 @@ class Game():
         player.light_on()
         time.sleep(.5)
         player.light_off()
-    
-    
 
 if __name__ == '__main__':
     test = Game()
