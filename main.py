@@ -42,12 +42,13 @@ class Game():
     def is_button_clicked(self, player):
         if player.input_from_button() == 0:
 #             start threads
-            sounds.play_buzzer_pressed()
+            sounds.buzzer()
             t2 = threading.Thread( target=self.turn_light_on, args=(player,))
             t2.start()
+
 #             wait for thread execution
             t2.join()
-            print("after play")
+            
             return True
         else:
             return False
@@ -69,6 +70,8 @@ class Game():
         time.sleep(.5)
         player.light_off()
     
+    
+
 if __name__ == '__main__':
     test = Game()
     while True:

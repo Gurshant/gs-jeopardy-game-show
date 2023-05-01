@@ -1,4 +1,4 @@
-import serial, time, wave, threading, pygame, sys
+import threading, pygame, sys
 
 def play_sound(fileName):
     pygame.mixer.init()
@@ -8,13 +8,15 @@ def play_sound(fileName):
     while pygame.mixer.music.get_busy() == True:
         continue
 
-def play_right_answer():
-   threading.Thread( target=play_sound, args=('right_answer.wav',) ).start()
-#     playSound('right_answer.wav')
+def correct():
+    threading.Thread( target=play_sound, args=('right_answer.wav',) ).start()
 
-def play_buzzer_pressed():
-    t1 = threading.Thread( target=play_sound, args=('buzzer_pressed.wav',) )
-    t1.start()
-    t1.join()
-#     playSound('buzzer_pressed.wav')
+def incorrect():
+    threading.Thread( target=play_sound, args=('buzzer_pressed.wav',) ).start()
+
+def buzzer():
+    t1 = threading.Thread( target=play_sound, args=('buzzer_pressed.wav',) ).start()
+    # t1.join()
+
+
 
