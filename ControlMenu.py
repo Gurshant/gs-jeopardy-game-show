@@ -1,6 +1,7 @@
 import pygame
 import sys
-import main
+import game
+import sounds
 import threading
 import RPi.GPIO as gpio
 
@@ -27,7 +28,7 @@ class ControlMenu():
         # superimposing the text onto our button
         self.screen.blit(self.text , (self.width/2+50,self.height/2))
         
-        self.game = main.Game()
+        self.game = game.Game()
 
     def handle_event(self):
         for ev in pygame.event.get():
@@ -50,6 +51,8 @@ class ControlMenu():
             # if keyboard
             if ev.type == pygame.KEYDOWN:
                 if pygame.key.name(ev.key) == 'y':
+                    sounds.correct()
+                    
                     print(pygame.key.name(ev.key))
                 elif pygame.key.name(ev.key) == 'n':
                     print(pygame.key.name(ev.key))
