@@ -33,22 +33,27 @@ class ControlMenu():
     def handle_event(self):
         for ev in pygame.event.get():
             # if quitting
-            if ev.type == pygame.QUIT or pygame.key.name(ev.key) == 'q':
+            if ev.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            # if correct answer 
-            elif pygame.key.name(ev.key) == 'y':
-                Sounds.correct()
-                self.game.reset()
-            # if incorrect
-            elif pygame.key.name(ev.key) == 'n':
-                Sounds.incorrect()
-                self.game.reset()
-            # fail safe for just sounds
-            elif pygame.key.name(ev.key) == 'c':
-                Sounds.correct()
-            elif pygame.key.name(ev.key) == 'w':
-                Sounds.incorrect()
+            if ev.type == pygame.KEYDOWN:
+                if pygame.key.name(ev.key) == 'q':
+                    pygame.quit()
+                    sys.exit()
+                # if correct answer
+                elif pygame.key.name(ev.key) == 'y':
+                    Sounds.correct()
+                    self.game.reset()
+                # if incorrect
+                elif pygame.key.name(ev.key) == 'n':
+                    Sounds.incorrect()
+                    self.game.reset()
+                # fail safe for just sounds
+                elif pygame.key.name(ev.key) == 'c':
+                    Sounds.correct()
+                elif pygame.key.name(ev.key) == 'w':
+                    Sounds.incorrect()
+
             # stores the (x,y) coordinates into the variable as a tuple
             mouse = pygame.mouse.get_pos()
             

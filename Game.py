@@ -4,10 +4,11 @@ import Player, Sounds
 
 class Game():
     def __init__(self):
+        self.winners = ''
         #Setup pins and board
         self.players = [
             Player.Player("Player 1",4,5),
-            Player.Player("Player 2",26,6),
+            Player.Player("Player 2",26,6)
             # player.Player("Player 3",21,7),
             # player.Player("Player 4",22,8)
         ]
@@ -15,7 +16,7 @@ class Game():
         # self.p2 = player.Player("Player 2",26,6)
 #         self.p3 = player.Player("Player 3",21,7)
 #         self.p4 = player.Player("Player 4",22,8)
-        self.winner = ''
+        
 
 
     def reset(self):
@@ -71,6 +72,7 @@ class Game():
         time.sleep(.5)
         player.light_on()
         time.sleep(.5)
+        Sounds.buzzer()
         player.light_off()
     
     def turn_all_lights_off(self):
