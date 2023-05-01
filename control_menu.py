@@ -76,6 +76,7 @@ class ControlMenu():
             # updates the frames of the game
             pygame.display.update()
     
+    
     def run_game2(self):
         winner = ''
         while winner == '':
