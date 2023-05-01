@@ -1,7 +1,7 @@
 import pygame
 import sys
-import game
-import sounds
+import Game
+import Sounds
 import threading
 import RPi.GPIO as gpio
 
@@ -28,48 +28,37 @@ class ControlMenu():
         # superimposing the text onto our button
         self.screen.blit(self.text , (self.width/2+50,self.height/2))
         
-        self.game = game.Game()
+        self.game = Game.Game()
 
     def handle_event(self):
         for ev in pygame.event.get():
-#               if quitting
-            if ev.type == pygame.QUIT:
+            # if quitting
+            if ev.type == pygame.QUIT or pygame.key.name(ev.key) == 'q':
                 pygame.quit()
                 sys.exit()
-            
+            # if correct answer 
+            elif pygame.key.name(ev.key) == 'y':
+                Sounds.correct()
+                self.game.reset()
+            # if incorrect
+            elif pygame.key.name(ev.key) == 'n':
+                Sounds.incorrect()
+                self.game.reset()
+            # fail safe for just sounds
+            elif pygame.key.name(ev.key) == 'c':
+                Sounds.correct()
+            elif pygame.key.name(ev.key) == 'w':
+                Sounds.incorrect()
             # stores the (x,y) coordinates into the variable as a tuple
             mouse = pygame.mouse.get_pos()
             
             #if mouse
             if ev.type == pygame.MOUSEBUTTONDOWN:
-                print("AAAAAA")
                 #if the mouse is clicked on the button the game is terminated
                 if self.width/2 <= mouse[0] <= self.width/2+140 and self.height/2 <= mouse[1] <= self.height/2+40:
                     pygame.quit()
                     sys.exit()
                     
-            # if keyboard
-            if ev.type == pygame.KEYDOWN:
-                if pygame.key.name(ev.key) == 'y':
-                    sounds.correct()
-                    
-                    print(pygame.key.name(ev.key))
-                elif pygame.key.name(ev.key) == 'n':
-                    print(pygame.key.name(ev.key))
-#                   quit app
-                elif pygame.key.name(ev.key) == 'q':
-                    print(pygame.key.name(ev.key))
-#                   correct sound and reset
-                elif pygame.key.name(ev.key) == 'c':
-#                   incorrect sound and reset
-                    print(pygame.key.name(ev.key))
-                elif pygame.key.name(ev.key) == 'w':
-                    print(pygame.key.name(ev.key))
-                
-                print(pygame.key.name(ev.key))
-
-            
-            
             # if mouse is hovered on a button it changes to lighter shade
             if self.width/2 <= mouse[0] <= self.width/2+140 and self.height/2 <= mouse[1] <= self.height/2+40:
                 pygame.draw.rect(self.screen,self.color_light,[self.width/2,self.height/2,140,40])
@@ -78,8 +67,7 @@ class ControlMenu():
             
             # updates the frames of the game
             pygame.display.update()
-    
-    
+
     def run_game2(self):
         winner = ''
         while winner == '':

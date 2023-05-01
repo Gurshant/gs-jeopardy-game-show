@@ -9,13 +9,13 @@ def play_sound(fileName):
         continue
 
 def correct():
-    threading.Thread( target=play_sound, args=('right_answer.wav',) ).start()
+    threading.Thread( target=play_sound, args=('./sounds/right_answer.wav',) ).start()
 
 def incorrect():
-    threading.Thread( target=play_sound, args=('buzzer_pressed.wav',) ).start()
+    threading.Thread( target=play_sound, args=('./sounds/wrong.mp3',) ).start()
 
 def buzzer():
-    threading.Thread( target=play_sound, args=('buzzer_pressed.wav',) ).start()
+    threading.Thread( target=play_sound, args=('./sounds/buzzer_pressed.wav',) ).start()
     # t1.join()
 
 

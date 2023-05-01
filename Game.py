@@ -1,13 +1,13 @@
 import RPi.GPIO as gpio
 import time, threading
-import player, sounds
+import Player, Sounds
 
 class Game():
     def __init__(self):
         #Setup pins and board
         self.players = [
-            player.Player("Player 1",4,5),
-            player.Player("Player 2",26,6),
+            Player.Player("Player 1",4,5),
+            Player.Player("Player 2",26,6),
             # player.Player("Player 3",21,7),
             # player.Player("Player 4",22,8)
         ]
@@ -53,7 +53,7 @@ class Game():
             return False
     
     def button_clicked(self, player):
-        sounds.buzzer()
+        Sounds.buzzer()
         self.turn_light_on(player)
 
     def turn_light_on(self, player):
