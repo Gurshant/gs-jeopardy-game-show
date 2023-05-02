@@ -15,6 +15,7 @@ class Game():
 
     def reset(self):
         self.winner = ''
+        self.turn_all_lights_off()
 
     def check(self):
 #         if button already enables
@@ -52,6 +53,7 @@ class Game():
         self.turn_light_on(player)
 
     def turn_light_on(self, player):
+#         TODO improve this
         player.light_on()
         time.sleep(3)
         player.light_off()
