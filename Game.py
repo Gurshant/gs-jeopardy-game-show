@@ -1,5 +1,5 @@
 import time
-import multiprocessing
+import threading
 import Player
 import Sounds
 
@@ -13,11 +13,11 @@ class Game():
             # player.Player("Player 3",21,7),
             # player.Player("Player 4",22,8)
         ]
-        self.button_process = None
+        self.abort_thread = False
 
     def reset(self):
         self.winner = ''
-        self.kill_process()
+        self.abort_thread = True
         self.turn_all_lights_off()
 
     def check(self):
@@ -42,40 +42,42 @@ class Game():
         if player.current_state == 0 and prior == 1:
             
 # TODO could maybe cleanup to a .find
-            if self.button_process.is_alive():
-                return False
+            for th in threading.enumerate():
+                if th.name == 'button':
+                    return False
             
-            self.button_process = multiprocessing.Process( target=self.button_clicked, args=(player, ), name='button').start()
+            threading.Thread( target=self.button_clicked, args=(player, ), name='button').start()
             return True
         else:
             return False
     
     def button_clicked(self, player):
         Sounds.buzzer()
-        self.turn_light_on(player)
+        self.turn_light_on(player, 10)
 
-    def turn_light_on(self, player):
+    def turn_light_on(self, player, seconds):
 #         TODO improve this
-        player.light_on()
-        time.sleep(3)
-        player.light_off()
-        time.sleep(.5)
-        player.light_on()
-        time.sleep(.5)
-        player.light_off()
-        time.sleep(.5)
-        player.light_on()
-        time.sleep(.5)
-        player.light_off()
-        time.sleep(.5)
-        player.light_on()
-        time.sleep(.5)
+        s_elapsed = 0
+        while s_elapsed < seconds:
+            if self.abort_thread:
+                player.light_off()
+                s_elapsed = seconds
+                self.abort_thread = False
+                return
+            elif seconds - s_elapsed < 5:
+                player.light_on()
+                time.sleep(.5)
+                player.light_off()
+                time.sleep(.5)
+            else:
+                player.light_on()
+                time.sleep(1)
+            
+            s_elapsed += 1
+            
         Sounds.buzzer()
-        player.light_off()
     
     def turn_all_lights_off(self):
         for p in self.players:
             p.light_off()
     
-    def kill_process(self):
-        self.button_process.terminate()
