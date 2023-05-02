@@ -47,6 +47,9 @@ class ControlMenu():
                 elif pygame.key.name(ev.key) == 'n':
                     Sounds.incorrect()
                     self.game.reset()
+                # reset to default state
+                elif pygame.key.name(ev.key) == 'r':
+                    self.game.reset()
                 # fail safe for just sounds
                 elif pygame.key.name(ev.key) == 'c':
                     Sounds.correct()
