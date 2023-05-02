@@ -1,6 +1,7 @@
-import RPi.GPIO as gpio
-import time, threading
-import Player, Sounds
+import time
+import multiprocessing
+import Player
+import Sounds
 
 class Game():
     def __init__(self):
@@ -12,9 +13,11 @@ class Game():
             # player.Player("Player 3",21,7),
             # player.Player("Player 4",22,8)
         ]
+        self.button_process = None
 
     def reset(self):
         self.winner = ''
+        self.kill_process()
         self.turn_all_lights_off()
 
     def check(self):
@@ -39,11 +42,10 @@ class Game():
         if player.current_state == 0 and prior == 1:
             
 # TODO could maybe cleanup to a .find
-            for th in threading.enumerate():
-                if th.name == 'button':
-                    return False
+            if self.button_process.is_alive():
+                return False
             
-            self.button_thread = threading.Thread( target=self.button_clicked, args=(player, ), name='button').start()
+            self.button_process = multiprocessing.Process( target=self.button_clicked, args=(player, ), name='button').start()
             return True
         else:
             return False
@@ -74,3 +76,6 @@ class Game():
     def turn_all_lights_off(self):
         for p in self.players:
             p.light_off()
+    
+    def kill_process(self):
+        self.button_process.terminate()

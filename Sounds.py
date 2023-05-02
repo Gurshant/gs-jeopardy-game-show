@@ -1,4 +1,5 @@
-import threading, pygame, sys
+import threading
+import pygame
 
 def play_sound(fileName):
     pygame.mixer.init()

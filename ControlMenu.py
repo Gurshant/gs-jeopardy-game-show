@@ -2,7 +2,6 @@ import pygame
 import sys
 import Game
 import Sounds
-import threading
 import RPi.GPIO as gpio
 
 class ControlMenu():
