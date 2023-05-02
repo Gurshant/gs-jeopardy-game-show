@@ -76,7 +76,6 @@ class ControlMenu():
     def run_game2(self):
         winner = ''
         while winner == '':
-            print ('run')
             self.game.check() 
             self.handle_event()
             

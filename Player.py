@@ -8,6 +8,7 @@ class Player():
         #Setup pins and board
         self.button_pin = button
         self.light_pin = light
+        self.current_state  = 1
 
         gpio.setup(self.button_pin, gpio.IN, pull_up_down=gpio.PUD_UP)
         #TODO Combine these two lines under if possible
