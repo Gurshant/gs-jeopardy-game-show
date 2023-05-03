@@ -12,24 +12,22 @@ class ControlMenu():
         pygame.init()
         # opens up a window
         self.screen = pygame.display.set_mode((720,720))
-        # white color
-        self.color = (255,255,255)
-        # light shade of the button
+        # light shade 
         self.color_light = (170,170,170)
-        # dark shade of the button
+        # dark shade
         self.color_dark = (100,100,100)
         # stores the width of the screen into a variable
         self.width = self.screen.get_width()
         # stores the height of the screen into a variable
         self.height = self.screen.get_height()
         # rendering a text written in this font
-        self.text = pygame.font.SysFont('Corbel',35).render('quit' , True , self.color)
+        self.text = pygame.font.SysFont('Corbel',35).render('quit' , True , (255,255,255))
         # superimposing the text onto our button
-        self.screen.blit(self.text , (self.width/2+50,self.height/2))
+        self.screen.blit(self.text, (self.width/2+50,self.height/2))
         
         self.game = Game.Game()
 
-    def handle_event(self):
+    def event_handler(self):
         for ev in pygame.event.get():
             # if quitting
             if ev.type == pygame.QUIT:
@@ -79,8 +77,7 @@ class ControlMenu():
         winner = ''
         while winner == '':
             self.game.check() 
-            self.handle_event()
-            
+            self.event_handler()
         
         gpio.cleanup()
 
