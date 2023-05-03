@@ -2,77 +2,76 @@ import pygame
 import sys
 import Game
 import Sounds
+import colors
+import button
 import RPi.GPIO as gpio
 
 class ControlMenu():
     
     def __init__(self):
         gpio.setwarnings(False)
-        # initializing the constructor
         pygame.init()
-        # opens up a window
-        self.screen = pygame.display.set_mode((720,720))
-        # light shade 
-        self.color_light = (170,170,170)
-        # dark shade
-        self.color_dark = (100,100,100)
-        # stores the width of the screen into a variable
-        self.width = self.screen.get_width()
-        # stores the height of the screen into a variable
-        self.height = self.screen.get_height()
-        # rendering a text written in this font
-        self.text = pygame.font.SysFont('Corbel',35).render('quit' , True , (255,255,255))
-        # superimposing the text onto our button
-        self.screen.blit(self.text, (self.width/2+50,self.height/2))
-        
+        self.width = 750
+        self.height = 500
+        self.screen = pygame.display.set_mode((self.width,self.height))
         self.game = Game.Game()
+        self.__init__buttons__()
+    
+    def __init__buttons__(self):
+        self.buttons = [
+            button.button(colors.GREEN,60,50,50,300,70,'correct (y)', self.correct_ans),
+            button.button(colors.RED,60, self.width/2+25,50,300,70,'incorrect (n)', self.incorrect_ans),
+            
+            button.button(colors.BLUE,25,50,self.height/2,150,40,'Reset (r)', self.game.reset),
+            button.button(colors.YELLOW_GREEN,25, self.width/3+75,self.height/2,150,40,'Yes Sound', Sounds.correct),
+            button.button(colors.YELLOW_RED,25, self.width*2/3+25,self.height/2,150,40,'No Sound', Sounds.incorrect),
+            
+            button.button(colors.RED,25, self.width*2/3,self.height-50,150,40,'Quit (q)', self.quit_game)
+        ]
+        for b in self.buttons:
+            b.draw(self.screen)
 
     def event_handler(self):
         for ev in pygame.event.get():
             # if quitting
             if ev.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+                self.quit_game()
+                
             if ev.type == pygame.KEYDOWN:
                 if pygame.key.name(ev.key) == 'q':
-                    pygame.quit()
-                    sys.exit()
-                # if correct answer
+                    self.quit_game()
                 elif pygame.key.name(ev.key) == 'y':
-                    Sounds.correct()
-                    self.game.reset()
-                # if incorrect
+                    self.correct_ans()
                 elif pygame.key.name(ev.key) == 'n':
-                    Sounds.incorrect()
-                    self.game.reset()
-                # reset to default state
+                    self.incorrect_ans()
                 elif pygame.key.name(ev.key) == 'r':
                     self.game.reset()
                 # fail safe for just sounds
-                elif pygame.key.name(ev.key) == 'c':
-                    Sounds.correct()
-                elif pygame.key.name(ev.key) == 'w':
-                    Sounds.incorrect()
+#                 elif pygame.key.name(ev.key) == 'c':
+#                     Sounds.correct()
+#                 elif pygame.key.name(ev.key) == 'w':
+#                     Sounds.incorrect()
 
-            # stores the (x,y) coordinates into the variable as a tuple
-            mouse = pygame.mouse.get_pos()
-            
-            #if mouse
             if ev.type == pygame.MOUSEBUTTONDOWN:
-                #if the mouse is clicked on the button the game is terminated
-                if self.width/2 <= mouse[0] <= self.width/2+140 and self.height/2 <= mouse[1] <= self.height/2+40:
-                    pygame.quit()
-                    sys.exit()
+                for b in self.buttons:
+                    if b.isOver(pygame.mouse.get_pos()):
+                        b.callback()
                     
-            # if mouse is hovered on a button it changes to lighter shade
-            if self.width/2 <= mouse[0] <= self.width/2+140 and self.height/2 <= mouse[1] <= self.height/2+40:
-                pygame.draw.rect(self.screen,self.color_light,[self.width/2,self.height/2,140,40])
-            else:
-                pygame.draw.rect(self.screen,self.color_dark,[self.width/2,self.height/2,140,40])
-            
             # updates the frames of the game
             pygame.display.update()
-
+    def quit_game(self):
+        pygame.quit()
+        sys.exit()
+        
+    def correct_ans(self):
+        Sounds.correct()
+        self.game.reset()
+    
+    def incorrect_ans(self):
+        Sounds.incorrect()
+        self.game.reset()
+        
+        
     def run_game2(self):
         winner = ''
         while winner == '':
