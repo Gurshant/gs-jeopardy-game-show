@@ -19,14 +19,14 @@ class ControlMenu():
     
     def __init__buttons__(self):
         self.buttons = [
-            button.button(colors.GREEN,60,50,50,300,70,'correct (y)', self.correct_ans),
-            button.button(colors.RED,60, self.width/2+25,50,300,70,'incorrect (n)', self.incorrect_ans),
+            button.button(colors.GREEN,55,50,50,300,70,'correct (y)', self.correct_ans),
+            button.button(colors.RED,55, self.width/2+25,50,300,70,'incorrect (n)', self.incorrect_ans),
             
             button.button(colors.BLUE,25,50,self.height/2,150,40,'Reset (r)', self.game.reset),
-            button.button(colors.YELLOW_GREEN,25, self.width/3+75,self.height/2,150,40,'Yes Sound', Sounds.correct),
-            button.button(colors.YELLOW_RED,25, self.width*2/3+25,self.height/2,150,40,'No Sound', Sounds.incorrect),
+            button.button(colors.YELLOW_GREEN,25, self.width/3+125,self.height/2,150,40,'Yes Sound', Sounds.correct),
+            button.button(colors.YELLOW_RED,25, self.width*2/3+50,self.height/2,150,40,'No Sound', Sounds.incorrect),
             
-            button.button(colors.RED,25, self.width*2/3,self.height-50,150,40,'Quit (q)', self.quit_game)
+            button.button(colors.RED,25, self.width*2/3+50,self.height-50,150,40,'Quit (q)', self.quit_game)
         ]
         for b in self.buttons:
             b.draw(self.screen)
