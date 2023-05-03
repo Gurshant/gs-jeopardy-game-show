@@ -40,11 +40,8 @@ class Game():
         player.current_state = player.input_from_button()
         
         if player.current_state == 0 and prior == 1:
-            
-# TODO could maybe cleanup to a .find
-            for th in threading.enumerate():
-                if th.name == 'button':
-                    return False
+            if 'button' in threading.enumerate():
+                return False
             
             threading.Thread( target=self.button_clicked, args=(player, ), name='button').start()
             return True
@@ -56,7 +53,6 @@ class Game():
         self.turn_light_on(player, 10)
 
     def turn_light_on(self, player, seconds):
-#         TODO improve this
         s_elapsed = 0
         while s_elapsed < seconds:
             if self.abort_thread:
@@ -72,9 +68,7 @@ class Game():
             else:
                 player.light_on()
                 time.sleep(1)
-            
             s_elapsed += 1
-            
         Sounds.buzzer()
     
     def turn_all_lights_off(self):
