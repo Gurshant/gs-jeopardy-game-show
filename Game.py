@@ -4,7 +4,7 @@ import Player
 import Sounds
 
 class Game():
-    def __init__(self):
+    def __init__(self, steal_mode = False):
         self.winners = ''
         #Setup pins and board
         self.players = [
@@ -14,70 +14,76 @@ class Game():
             Player.Player("Player 4",26,19)
         ]
         self.abort_thread = False
-        self.disabled_player = ''
+        self.steal_mode = steal_mode
 
     def reset(self):
+        print('Reset Game')
         self.winner = ''
         self.abort_thread = True
-        self.turn_all_lights_off()
-
+        self.reset_players()
+    
+    def disable_player(self):
+        count = 0
+        self.abort_thread = True
+        for p in self.players:
+            if p.active:
+                print('Disabled ' + p.name)
+                p.disabled = True
+                count += 1
+        if count > 1:
+            self.reset()
+    
     def check(self):
-#         if button already enables
-# TODO turn this into a loop
-        if self.is_button_clicked(self.players[0]):
-            self.winner = '1'
-        elif self.is_button_clicked(self.players[1]):
-            self.winner = '2'
-        elif self.is_button_clicked(self.players[2]):
-            self.winner = '3'
-        elif self.is_button_clicked(self.players[3]):
-            self.winner = '4'
-        else:
-            pass
+        for p in self.players:
+            if self.is_button_clicked(p):
+                self.winners = p.name
         return self.winners
 
     def is_button_clicked(self, player):
-        
         prior = player.current_state
         player.current_state = player.input_from_button()
         
-        if player.current_state == 0 and prior == 1:
+        if player.current_state == 0 and prior == 1 and not player.disabled:
             for th in threading.enumerate():
-                if th.name == 'button':
-                    print('th running')
+                if th.name == 'light':
+                    print('light thread running')
                     return False
-            
-            threading.Thread( target=self.button_clicked, args=(player, ), name='button').start()
+            self.abort_thread = False
+            threading.Thread( target=self.button_clicked, args=(player, ), name='light').start()
             print('create thread')
             return True
         else:
             return False
     
     def button_clicked(self, player):
+        player.active = True
         Sounds.buzzer()
         self.turn_light_on(player, 10)
-
+                
     def turn_light_on(self, player, seconds):
         s_elapsed = 0
         while s_elapsed < seconds:
             if self.abort_thread:
+                print('abort')
+                self.abort_thread = False
                 player.light_off()
                 s_elapsed = seconds
-                self.abort_thread = False
                 return
             elif seconds - s_elapsed < 5:
                 player.light_on()
-                time.sleep(.5)
+                time.sleep(.25)
                 player.light_off()
-                time.sleep(.5)
+                time.sleep(.25)
             else:
                 player.light_on()
-                time.sleep(1)
+                time.sleep(.5)
             s_elapsed += 1
         Sounds.incorrect()
-    
-    def turn_all_lights_off(self):
+
+    def reset_players(self):
+        print('reset_players')
         for p in self.players:
-            p.light_off()
+            p.disabled = False
+            p.active = False
     
     
