@@ -11,6 +11,9 @@ class Player():
 
         gpio.setup(self.light_pin, gpio.OUT)
         gpio.output(self.light_pin, gpio.HIGH)
+        
+        self.active = False
+        self.disabled = False
 
     def light_on(self):
         gpio.output(self.light_pin, gpio.LOW)
@@ -20,3 +23,4 @@ class Player():
         
     def input_from_button(self):
         return gpio.input(self.button_pin)
+        
