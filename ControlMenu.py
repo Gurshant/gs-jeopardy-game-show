@@ -56,6 +56,7 @@ class ControlMenu():
                 for b in self.buttons:
                     if b.isOver(pygame.mouse.get_pos()):
                         b.callback()
+                        print('thread dead')
                     
             # updates the frames of the game
             pygame.display.update()
