@@ -10,14 +10,24 @@ def play_sound(fileName):
         continue
 
 def correct():
-    threading.Thread( target=play_sound, args=('./sounds/right_answer.wav',) ).start()
+    
+    threading.Thread( target=play_sound, args=('./sounds/right_answer.wav',), name='sound' ).start()
 
 def incorrect():
-    threading.Thread( target=play_sound, args=('./sounds/wrong.mp3',) ).start()
+    
+    threading.Thread( target=play_sound, args=('./sounds/wrong.mp3',), name='sound' ).start()
 
 def buzzer():
-    threading.Thread( target=play_sound, args=('./sounds/buzzer_pressed.wav',) ).start()
+    if(sound_running()):
+        threading.Thread( target=play_sound, args=('./sounds/buzzer_pressed.wav',), name='sound').start()
     # t1.join()
+    
+def sound_running():
+    for th in threading.enumerate():
+        if th.name == 'sound':
+            print('sound th running')
+            return False
+    return True
 
 
 
