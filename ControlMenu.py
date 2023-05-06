@@ -23,7 +23,6 @@ class ControlMenu():
         self.screen.blit(text, (self.width/2-200,self.height/2))
         
         
-        
         self.__init__buttons__()
     
     def __init__buttons__(self):
@@ -37,8 +36,8 @@ class ControlMenu():
         small_height = 150
         small_font_size = 25
         self.buttons = [
-            button.button(colors.GREEN,big_font_size,50,row1_height,big_width,big_height,'Correct (y)', self.correct_ans),
-            button.button(colors.RED,big_font_size, self.width/2+25,row1_height,big_width,big_height,'Incorrect (n)', self.incorrect_ans),
+            button.button(colors.GREEN,big_font_size,50,row1_height,big_width,big_height,'Correct (y)', self.game.correct_ans),
+            button.button(colors.RED,big_font_size, self.width/2+25,row1_height,big_width,big_height,'Incorrect (n)', self.game.incorrect_ans),
             
             button.button(colors.BLUE,small_font_size,50,row2_height,small_height,small_width,'Reset (r)', self.game.reset),
             button.button(colors.YELLOW_GREEN,small_font_size, self.width/3+125,row2_height,small_height,small_width,'Yes Sound', Sounds.correct),
@@ -59,9 +58,9 @@ class ControlMenu():
                 if pygame.key.name(ev.key) == 'q':
                     self.quit_game()
                 elif pygame.key.name(ev.key) == 'y':
-                    self.correct_ans()
+                    self.game.correct_ans()
                 elif pygame.key.name(ev.key) == 'n':
-                    self.incorrect_ans()
+                    self.game.incorrect_ans()
                 elif pygame.key.name(ev.key) == 'r':
                     self.game.reset()
                 # fail safe for just sounds
@@ -80,19 +79,7 @@ class ControlMenu():
     def quit_game(self):
         pygame.quit()
         sys.exit()
-        
-    def correct_ans(self):
-        Sounds.correct()
-        self.game.reset()
-    
-    def incorrect_ans(self):
-        Sounds.incorrect()
-        if self.game.steal_mode:
-            self.game.disable_player()
-        else:
-            self.game.reset()
-        
-        
+         
     def run_game(self):
         winner = ''
         while winner == '':

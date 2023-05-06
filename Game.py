@@ -11,7 +11,7 @@ class Game():
             Player.Player("Player 1",3,5),
             Player.Player("Player 2",23,6),
             Player.Player("Player 3",24,13),
-            Player.Player("Player 4",26,19)
+            Player.Player("Player 4",12,19)
         ]
         self.abort_thread = False
         self.steal_mode = steal_mode
@@ -46,10 +46,11 @@ class Game():
         if player.current_state == 0 and prior == 1 and not player.disabled:
             for th in threading.enumerate():
                 if th.name == 'light':
-                    print('light thread running')
+                    print(player.name)
                     return False
             self.abort_thread = False
             threading.Thread( target=self.button_clicked, args=(player, ), name='light').start()
+            print(player.name)
             print('create thread')
             return True
         else:
@@ -77,13 +78,25 @@ class Game():
             else:
                 player.light_on()
                 time.sleep(.5)
-            s_elapsed += 1
-        Sounds.incorrect()
+            s_elapsed += .5
+        self.incorrect_ans()
 
     def reset_players(self):
         print('reset_players')
         for p in self.players:
             p.disabled = False
             p.active = False
+            
+    def incorrect_ans(self):
+        Sounds.incorrect()
+        if self.steal_mode:
+            self.disable_player()
+        else:
+            self.reset()
+            
+    def correct_ans(self):
+        Sounds.correct()
+        self.reset()
+        
     
     
