@@ -14,7 +14,7 @@ class Game():
             Player.Player("Player 4",12,19)
         ]
         self.abort_thread = False
-        self.steal_mode = steal_mode
+        self.steal_mode = True
 
     def reset(self):
         print('Reset Game')
@@ -58,7 +58,7 @@ class Game():
     
     def button_clicked(self, player):
         player.active = True
-        Sounds.buzzer()
+        Sounds.incorrect()
         self.turn_light_on(player, 10)
                 
     def turn_light_on(self, player, seconds):
@@ -98,5 +98,12 @@ class Game():
         Sounds.correct()
         self.reset()
         
+    def round_1(self):
+        print('Round 1 (Steal Mode)')
+        self.steal_mode = True
+        
+    def round_2(self):
+        print('Round 2 (Speed )')
+        self.steal_mode = False
     
     
