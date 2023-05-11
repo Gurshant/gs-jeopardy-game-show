@@ -59,7 +59,7 @@ class Game():
         player.active = True
         Sounds.buzzer()
         self.turn_light_on(player, 10)
-                
+
     def turn_light_on(self, player, seconds):
         s_elapsed = 0
         while s_elapsed < seconds:
@@ -79,11 +79,9 @@ class Game():
                 time.sleep(.5)
             s_elapsed += 1
         Sounds.incorrect()
-
+    
     def reset_players(self):
         print('reset_players')
         for p in self.players:
             p.disabled = False
             p.active = False
-    
-    
