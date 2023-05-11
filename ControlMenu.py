@@ -14,13 +14,12 @@ class ControlMenu():
         self.width = 750
         self.height = 500
         self.screen = pygame.display.set_mode((self.width,self.height))
-        self.game = Game.Game(steal_mode)
+        self.game = Game.Game()
         
         text = pygame.font.SysFont('arial', 40).render("Controls", 1, (255,255,255))
         self.screen.blit(text, (self.width/2-70,50))
         text = pygame.font.SysFont('arial', 40).render("ADMIN USE ONLY**", 1, (255,255,255))
         self.screen.blit(text, (self.width/2-200,self.height/2))
-        
         self.__init__buttons__()
     
     def __init__buttons__(self):
@@ -54,9 +53,9 @@ class ControlMenu():
                 if pygame.key.name(ev.key) == 'q':
                     self.quit_game()
                 elif pygame.key.name(ev.key) == 'y':
-                    self.correct_ans()
+                    self.game.correct_ans()
                 elif pygame.key.name(ev.key) == 'n':
-                    self.incorrect_ans()
+                    self.game.incorrect_ans()
                 elif pygame.key.name(ev.key) == 'r':
                     self.game.reset()
 
@@ -70,19 +69,7 @@ class ControlMenu():
     def quit_game(self):
         pygame.quit()
         sys.exit()
-        
-    def correct_ans(self):
-        Sounds.correct()
-        self.game.reset()
-    
-    def incorrect_ans(self):
-        Sounds.incorrect()
-        if self.game.steal_mode:
-            self.game.disable_player()
-        else:
-            self.game.reset()
-        
-        
+         
     def run_game(self):
         winner = ''
         while winner == '':

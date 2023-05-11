@@ -13,11 +13,11 @@ def correct():
     threading.Thread( target=play_sound, args=('./sounds/right_answer.wav',)).start()
 
 def incorrect():
-    threading.Thread( target=play_sound, args=('./sounds/wrong.mp3',)).start()
+    threading.Thread( target=play_sound, args=('./sounds/buzzer_pressed.wav',)).start()
 
 def buzzer():
     if(sound_running()):
-        threading.Thread( target=play_sound, args=('./sounds/buzzer_pressed.wav',), name='buzzer').start()
+        threading.Thread( target=play_sound, args=('./sounds/wrong.mp3',), name='buzzer').start()
     # t1.join()
     
 def sound_running():
