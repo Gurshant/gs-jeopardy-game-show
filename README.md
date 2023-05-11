@@ -1,4 +1,4 @@
-# Game Show Python Project
+# Gobind Sarvar Jeopardy Game Show
 
 This is a Python project developed for a history Jeopardy competition successfully used by Gobind Sarvar Surrey School. The project implements a 4-player game show with multiple modes, buzzer functionality, sound effects, player light indicators, a GUI component for administrative control, and multi-threading support. It is designed to run on a Raspberry Pi and provides an interactive and engaging experience for the participants.
 
@@ -50,7 +50,7 @@ To use the Game Show Python project on a Raspberry Pi, follow these steps:
 
 1. Set up your Raspberry Pi with the necessary peripherals (buttons, lights, speakers, and a display for the GUI component).
 2. Install Python on your Raspberry Pi if not already installed.
-3. Clone the project repository from GitHub: `git clone https://github.com/Gurshant/gs-jeopardy-competition`
+3. Clone the project repository from GitHub: `git clone https://github.com/Gurshant/gs-jeopardy-game-show`
 4. Install the required dependencies by running the following command: `pip install -r requirements.txt`
 5. Connect the buttons and lights to the Raspberry Pi GPIO pins according to the project's wiring diagram.
 6. Configure the sound effects to be played by connecting the speakers to the Raspberry Pi audio output.
