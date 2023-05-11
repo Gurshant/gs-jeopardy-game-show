@@ -60,7 +60,7 @@ class Game():
         player.active = True
         Sounds.incorrect()
         self.turn_light_on(player, 10)
-                
+
     def turn_light_on(self, player, seconds):
         s_elapsed = 0
         while s_elapsed < seconds:
