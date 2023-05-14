@@ -63,5 +63,5 @@ To use the Game Show Python project on a Raspberry Pi, follow these steps:
 The Game Show Python project was developed by the following contributors:
 
 - Gurshant Sandhu ([@gurshant](https://github.com/gurshant))
-- Charlie Gill 
+- Charlie Gill ([@charlie](https://github.com/cgill87))
 
