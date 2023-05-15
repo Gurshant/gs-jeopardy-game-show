@@ -1,0 +1,30 @@
+RPi GPIO Intputs
+  - Button 1 => GPIO 3 (Board Pin 5) 
+  - Button 2 => GPIO 23 (Board Pin 16)
+  - Button 3 => GPIO 24 (Board Pin 18)
+  - Button 4 => GPIO 12 (Board Pin 32)
+  
+  
+ RPi GPIO Outputs 
+ - Relay IN1 => GPIO 5 (Board Pin 29)
+ - Relay IN2 => GPIO 6 (Board Pin 31)
+ - Relay IN3 => GPIO 13 (Board Pin 33)
+ - Relay IN4 => GPIO 19 (Board Pin 35)
+ 
+Relay Load Light Connections 
+- K1 COM => 120 VAC (HOT) 
+- K2 COM => 120 VAC (HOT) 
+- K3 COM => 120 VAC (HOT) 
+- K4 COM => 120 VAC (HOT) 
+- Connect all the Light Neutrals together with the 120 VAC Neutral wire 
+
+- K1 N.O => Light 1 HOT WIRE
+- K2 N.O => Light 2 HOT WIRE
+- K3 N.O => Light 3 HOT WIRE
+- K4 N.O => Light 4 HOT WIRE
+
+4-Channel Relay Board 
+- Connect Ground (GND) from RPi to Relay GND on the Relay Board 
+- Remove the yellow jumper between JD-VCC and VCC Pins 
+- Connect 5V Power from RPi to the JD-VCC Pin 
+- Connect 3.3V Power from RPi to the VCC Pin 
