@@ -58,6 +58,10 @@ To use the Game Show Python project on a Raspberry Pi, follow these steps:
 8. Use the GUI interface to control the game.
 9. Participants can interact with the game using the buzzer buttons.
 
+## Wiring Diagram
+
+<img src="https://github.com/Gurshant/gs-jeopardy-game-show/blob/master/wiring%20diagram.jpeg" align="left" height="900" width="380" >
+
 ## Contributors
 
 The Game Show Python project was developed by the following contributors:
