@@ -60,7 +60,7 @@ To use the Game Show Python project on a Raspberry Pi, follow these steps:
 
 ## Wiring Diagram
 
-<img src="https://github.com/Gurshant/gs-jeopardy-game-show/blob/master/wiring%20diagram.jpeg" align="left" height="900" width="380" >
+<img src="https://github.com/Gurshant/gs-jeopardy-game-show/blob/master/wiring%20diagram.jpeg" height="900" width="380" >
 
 ---
 ## Contributors
