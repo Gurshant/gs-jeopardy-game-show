@@ -7,7 +7,6 @@ import button
 import RPi.GPIO as gpio
 
 class ControlMenu():
-    
     def __init__(self, steal_mode = False):
         gpio.setwarnings(False)
         pygame.init()
@@ -21,7 +20,7 @@ class ControlMenu():
         text = pygame.font.SysFont('arial', 40).render("ADMIN USE ONLY**", 1, (255,255,255))
         self.screen.blit(text, (self.width/2-200,self.height/2))
         self.__init__buttons__()
-    
+
     def __init__buttons__(self):
         row1_height = 120
         row2_height = self.height/2+100
@@ -66,10 +65,11 @@ class ControlMenu():
                     
             # updates the frames of the game
             pygame.display.update()
+
     def quit_game(self):
         pygame.quit()
         sys.exit()
-         
+
     def run_game(self):
         winner = ''
         while winner == '':
@@ -79,6 +79,5 @@ class ControlMenu():
         gpio.cleanup()
 
 if __name__ == '__main__':
-    
     menu = ControlMenu()
     menu.run_game()

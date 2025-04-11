@@ -2,16 +2,18 @@ import time
 import threading
 import Player
 import Sounds
+import board
+import colors
 
 class Game():
     def __init__(self, steal_mode = False):
         self.winners = ''
         #Setup pins and board
         self.players = [
-            Player.Player("Player 1",3,5),
-            Player.Player("Player 2",23,6),
-            Player.Player("Player 3",24,13),
-            Player.Player("Player 4",12,19)
+            Player.Player("Player 1",3,5,board.D16),
+            Player.Player("Player 2",23,6,board.D17),
+            Player.Player("Player 3",24,7,board.D18),
+            Player.Player("Player 4",12,8,board.D19)
         ]
         self.abort_thread = False
         self.steal_mode = True
@@ -21,7 +23,7 @@ class Game():
         self.winner = ''
         self.abort_thread = True
         self.reset_players()
-    
+
     def disable_player(self):
         count = 0
         self.abort_thread = True
@@ -55,10 +57,11 @@ class Game():
             return True
         else:
             return False
-    
+
     def button_clicked(self, player):
         player.active = True
         Sounds.incorrect()
+        player.button_light_on()
         self.turn_light_on(player, 10)
 
     def turn_light_on(self, player, seconds):
@@ -67,16 +70,16 @@ class Game():
             if self.abort_thread:
                 print('abort')
                 self.abort_thread = False
-                player.light_off()
+                player.change_light_strip_color(colors.BLACK)
                 s_elapsed = seconds
                 return
             elif seconds - s_elapsed < 5:
-                player.light_on()
+                player.change_light_strip_color(colors.WHITE)
                 time.sleep(.25)
-                player.light_off()
+                player.change_light_strip_color(colors.BLACK)
                 time.sleep(.25)
             else:
-                player.light_on()
+                player.change_light_strip_color(colors.WHITE)
                 time.sleep(.5)
             s_elapsed += .5
         self.incorrect_ans()
@@ -86,24 +89,24 @@ class Game():
         for p in self.players:
             p.disabled = False
             p.active = False
-            
+            p.button_light_off()
+
     def incorrect_ans(self):
         Sounds.incorrect()
+
         if self.steal_mode:
             self.disable_player()
         else:
             self.reset()
-            
+
     def correct_ans(self):
         Sounds.correct()
         self.reset()
-        
+
     def round_1(self):
         print('Round 1 (Steal Mode)')
         self.steal_mode = True
-        
+
     def round_2(self):
         print('Round 2 (Speed )')
         self.steal_mode = False
-    
-    
