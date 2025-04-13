@@ -6,78 +6,82 @@ import colors
 import button
 import RPi.GPIO as gpio
 
-class ControlMenu():
-    def __init__(self, steal_mode = False):
+class ControlMenu:
+    WIDTH = 750
+    HEIGHT = 500
+    BIG_WIDTH = 300
+    BIG_HEIGHT = 70
+    SMALL_WIDTH = 40
+    SMALL_HEIGHT = 150
+    BIG_FONT_SIZE = 45
+    SMALL_FONT_SIZE = 25
+
+    def __init__(self, steal_mode=False):
         gpio.setwarnings(False)
         pygame.init()
-        self.width = 750
-        self.height = 500
-        self.screen = pygame.display.set_mode((self.width,self.height))
-        self.game = Game.Game()
-        
-        text = pygame.font.SysFont('arial', 40).render("Controls", 1, (255,255,255))
-        self.screen.blit(text, (self.width/2-70,50))
-        text = pygame.font.SysFont('arial', 40).render("ADMIN USE ONLY**", 1, (255,255,255))
-        self.screen.blit(text, (self.width/2-200,self.height/2))
-        self.__init__buttons__()
 
-    def __init__buttons__(self):
-        row1_height = 120
-        row2_height = self.height/2+100
-        row3_height = self.height-50
-        big_width = 300
-        big_height =70
-        big_font_size = 45
-        small_width = 40
-        small_height = 150
-        small_font_size = 25
+        self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
+        pygame.display.set_caption("Game Control Menu")
+
+        self.font_big = pygame.font.SysFont('arial', 40)
+        self.font_small = pygame.font.SysFont('arial', 25)
+
+        self.game = Game.Game(steal_mode=steal_mode)
+        self.buttons = []
+        self.setup_buttons()
+
+    def setup_buttons(self):
+        row1_y = 120
+        row2_y = self.HEIGHT / 2 + 100
+        row3_y = self.HEIGHT - 50
+
         self.buttons = [
-            button.button(colors.GREEN,big_font_size,50,row1_height,big_width,big_height,'Correct (y)', self.game.correct_ans),
-            button.button(colors.RED,big_font_size, self.width/2+25,row1_height,big_width,big_height,'Incorrect (n)', self.game.incorrect_ans),
-            button.button(colors.BLUE,small_font_size,50,row2_height,small_height,small_width,'Reset (r)', self.game.reset),
-            button.button(colors.YELLOW_GREEN,small_font_size, self.width/3+125,row2_height,small_height,small_width,'Yes Sound', Sounds.correct),
-            button.button(colors.YELLOW_RED,small_font_size, self.width*2/3+50,row2_height,small_height,small_width,'No Sound', Sounds.incorrect),
-            button.button(colors.RED,small_font_size, self.width*2/3+50,row3_height,small_height,small_width,'Quit (q)', self.quit_game)
+            button.button(colors.GREEN, self.BIG_FONT_SIZE, 50, row1_y, self.BIG_WIDTH, self.BIG_HEIGHT, 'Correct (y)', self.game.correct_ans),
+            button.button(colors.RED, self.BIG_FONT_SIZE, self.WIDTH / 2 + 25, row1_y, self.BIG_WIDTH, self.BIG_HEIGHT, 'Incorrect (n)', self.game.incorrect_ans),
+            button.button(colors.BLUE, self.SMALL_FONT_SIZE, 50, row2_y, self.SMALL_HEIGHT, self.SMALL_WIDTH, 'Reset (r)', self.game.reset),
+            button.button(colors.YELLOW_GREEN, self.SMALL_FONT_SIZE, self.WIDTH / 3 + 125, row2_y, self.SMALL_HEIGHT, self.SMALL_WIDTH, 'Yes Sound', Sounds.correct),
+            button.button(colors.YELLOW_RED, self.SMALL_FONT_SIZE, self.WIDTH * 2 / 3 + 50, row2_y, self.SMALL_HEIGHT, self.SMALL_WIDTH, 'No Sound', Sounds.incorrect),
+            button.button(colors.RED, self.SMALL_FONT_SIZE, self.WIDTH * 2 / 3 + 50, row3_y, self.SMALL_HEIGHT, self.SMALL_WIDTH, 'Quit (q)', self.quit_game)
         ]
+
+    def draw_screen(self):
+        self.screen.fill((0, 0, 0)) 
+        self.screen.blit(self.font_big.render("Controls", True, (255, 255, 255)), (self.WIDTH / 2 - 70, 50))
+        self.screen.blit(self.font_big.render("ADMIN USE ONLY**", True, (255, 255, 255)), (self.WIDTH / 2 - 200, self.HEIGHT / 2))
         for b in self.buttons:
             b.draw(self.screen)
+        pygame.display.update()
 
-    def event_handler(self):
-        for ev in pygame.event.get():
-            # if quitting
-            if ev.type == pygame.QUIT:
+    def handle_events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
                 self.quit_game()
-                
-            if ev.type == pygame.KEYDOWN:
-                if pygame.key.name(ev.key) == 'q':
-                    self.quit_game()
-                elif pygame.key.name(ev.key) == 'y':
-                    self.game.correct_ans()
-                elif pygame.key.name(ev.key) == 'n':
-                    self.game.incorrect_ans()
-                elif pygame.key.name(ev.key) == 'r':
-                    self.game.reset()
 
-            if ev.type == pygame.MOUSEBUTTONDOWN:
+            elif event.type == pygame.KEYDOWN:
+                keymap = {
+                    'q': self.quit_game,
+                    'y': self.game.correct_ans,
+                    'n': self.game.incorrect_ans,
+                    'r': self.game.reset
+                }
+                keyname = pygame.key.name(event.key)
+                if keyname in keymap:
+                    keymap[keyname]()
+
+            elif event.type == pygame.MOUSEBUTTONDOWN:
                 for b in self.buttons:
                     if b.isOver(pygame.mouse.get_pos()):
                         b.callback()
-                    
-            # updates the frames of the game
-            pygame.display.update()
 
     def quit_game(self):
         pygame.quit()
+        gpio.cleanup()
         sys.exit()
 
     def run_game(self):
-        winner = ''
-        while winner == '':
-            self.game.check() 
-            self.event_handler()
-        
-        gpio.cleanup()
+        while not self.game.check():
+            self.draw_screen()
+            self.handle_events()
 
 if __name__ == '__main__':
-    menu = ControlMenu()
-    menu.run_game()
+    ControlMenu().run_game()
