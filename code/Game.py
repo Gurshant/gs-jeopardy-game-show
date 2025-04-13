@@ -10,6 +10,7 @@ class Game():
         self.winners = ''
         #Setup pins and board
         self.players = [
+            #Player.Player("Player 1",3,5,board.D10),
             Player.Player("Player 1", 15, 23, board.D12),
             #Player.Player("Player 2", 6, 9, board.D12),
             #Player.Player("Player 3", 24, 7, board.D10),
@@ -20,16 +21,16 @@ class Game():
         
 
     def reset(self):
-        self._abort()
+        self.abort_thread = True
         time.sleep(1.5)
         print('Reset Game')
-        self.winners = ''
+        self.winner = ''
         self.reset_players()
         
 
     def disable_player(self):
         count = 0
-        self._abort()
+        self.abort_thread = True
         for p in self.players:
             if p.active:
                 print('Disabled ' + p.name)
@@ -53,12 +54,11 @@ class Game():
                 if th.name == 'light':
                     print(player.name)
                     return False
-            self._clear_abort()
-            threading.Thread( target=self.button_clicked, args=(player, ), name='light', daemon=True).start()
+            self.abort_thread = False
+            threading.Thread( target=self.button_clicked, args=(player, ), name='light').start()
             print(player.name)
             print('create thread')
             return True
-            
         return False
 
     def button_clicked(self, player):
@@ -72,7 +72,7 @@ class Game():
         while s_elapsed < seconds:
             if self.abort_thread:
                 print('abort')
-                self._clear_abort()
+                self.abort_thread = False
                 player.change_light_strip_color(colors.BLACK)
                 s_elapsed = seconds
                 return
@@ -120,10 +120,3 @@ class Game():
     def round_2(self):
         print('Round 2 (Speed )')
         self.steal_mode = False
-
-    # Utility methods
-    def _abort(self):
-        self.abort_thread = True
-
-    def _clear_abort(self):
-        self.abort_thread = False
