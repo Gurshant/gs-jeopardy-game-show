@@ -10,23 +10,21 @@ class Game():
         self.winners = ''
         #Setup pins and board
         self.players = [
-            #Player.Player("Player 1",3,5,board.D10),
-            Player.Player("Player 1", 15, 23, board.D12),
-            #Player.Player("Player 2", 6, 9, board.D12),
-            #Player.Player("Player 3", 24, 7, board.D10),
-            #Player.Player("Player 4", 12, 8, board.D21)
+            Player.Player("Player 1", 15, 23, board.D21),
+            Player.Player("Player 2", 6, 9, board.D18),
+            Player.Player("Player 3", 17, 26, board.D10),
+            #Player.Player("Player 4", 12, 8, board.D12)
         ]
         self.abort_thread = False
         self.steal_mode = True
-        
+        self.reset()
+        self.reset_players()
 
     def reset(self):
         self.abort_thread = True
-        time.sleep(1.5)
         print('Reset Game')
-        self.winner = ''
+        self.winners = ''
         self.reset_players()
-        
 
     def disable_player(self):
         count = 0
@@ -37,6 +35,7 @@ class Game():
                 p.disabled = True
                 count += 1
         if count > 1:
+            time.sleep(1.5)
             self.reset()
     
     def check(self):
@@ -55,7 +54,7 @@ class Game():
                     print(player.name)
                     return False
             self.abort_thread = False
-            threading.Thread( target=self.button_clicked, args=(player, ), name='light').start()
+            threading.Thread( target=self.button_clicked, args=(player, ), name='light', daemon=True).start()
             print(player.name)
             print('create thread')
             return True
@@ -69,23 +68,25 @@ class Game():
 
     def turn_light_on(self, player, seconds):
         s_elapsed = 0
-        while s_elapsed < seconds:
-            if self.abort_thread:
-                print('abort')
-                self.abort_thread = False
-                player.change_light_strip_color(colors.BLACK)
-                s_elapsed = seconds
-                return
-            elif seconds - s_elapsed < 5:
+        while s_elapsed < seconds and not self.abort_thread:
+            if seconds - s_elapsed < 5:
                 player.change_light_strip_color(colors.WHITE)
                 time.sleep(.25)
-                player.change_light_strip_color(colors.BLACK)
-                time.sleep(.25)
+                if not self.abort_thread:
+                    player.change_light_strip_color(colors.BLACK)
+                    time.sleep(.25)
+                if seconds - s_elapsed <= .5:
+                    self.incorrect_ans()
             else:
                 player.change_light_strip_color(colors.WHITE)
                 time.sleep(.5)
             s_elapsed += .5
-        self.incorrect_ans()
+        
+        if self.abort_thread:
+            print('thread aborted')
+            self.abort_thread = False
+            return
+            
 
     def reset_players(self):
         print('reset_players')
@@ -93,24 +94,31 @@ class Game():
             p.disabled = False
             p.active = False
             p.button_light_off()
-            p.change_light_strip_color(colors.WHITE)
+            p.change_light_strip_color(colors.BLACK)
 
     def incorrect_ans(self):
+        print('incorrect')
+        self.abort_thread = True
+        Sounds.incorrect()
         for p in self.players:
+            print(p.name, p.active)
             if p.active:
                 p.change_light_strip_color(colors.RED)
-        Sounds.incorrect()
         
         if self.steal_mode:
             self.disable_player()
         else:
+            time.sleep(1.5)
             self.reset()
 
     def correct_ans(self):
-        for p in self.players:
-            if p.active:
-                p.change_light_strip_color(colors.GREEN)
+        self.abort_thread = True
         Sounds.correct()
+        for p in self.players:
+            print(p.name, p.active, p.disabled)
+            if p.active and not p.disabled:
+                p.change_light_strip_color(colors.GREEN)
+        time.sleep(1.5)
         self.reset()
 
     def round_1(self):
