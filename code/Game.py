@@ -10,19 +10,23 @@ class Game():
         self.winners = ''
         #Setup pins and board
         self.players = [
-            Player.Player("Player 1",3,5,board.D10),
-            Player.Player("Player 2",23,6,board.D12),
-            Player.Player("Player 3",24,7,board.D18),
-            Player.Player("Player 4",12,8,board.D21)
+            #Player.Player("Player 1",3,5,board.D10),
+            Player.Player("Player 1", 15, 23, board.D12),
+            #Player.Player("Player 2", 6, 9, board.D12),
+            #Player.Player("Player 3", 24, 7, board.D10),
+            #Player.Player("Player 4", 12, 8, board.D21)
         ]
         self.abort_thread = False
         self.steal_mode = True
+        
 
     def reset(self):
+        self.abort_thread = True
+        time.sleep(1.5)
         print('Reset Game')
         self.winner = ''
-        self.abort_thread = True
         self.reset_players()
+        
 
     def disable_player(self):
         count = 0
@@ -90,16 +94,23 @@ class Game():
             p.disabled = False
             p.active = False
             p.button_light_off()
+            p.change_light_strip_color(colors.WHITE)
 
     def incorrect_ans(self):
+        for p in self.players:
+            if p.active:
+                p.change_light_strip_color(colors.RED)
         Sounds.incorrect()
-
+        
         if self.steal_mode:
             self.disable_player()
         else:
             self.reset()
 
     def correct_ans(self):
+        for p in self.players:
+            if p.active:
+                p.change_light_strip_color(colors.GREEN)
         Sounds.correct()
         self.reset()
 

@@ -32,8 +32,8 @@ class ControlMenu():
         small_height = 150
         small_font_size = 25
         self.buttons = [
-            button.button(colors.GREEN,big_font_size,50,row1_height,big_width,big_height,'Correct (y)', self.correct_ans),
-            button.button(colors.RED,big_font_size, self.width/2+25,row1_height,big_width,big_height,'Incorrect (n)', self.incorrect_ans),
+            button.button(colors.GREEN,big_font_size,50,row1_height,big_width,big_height,'Correct (y)', self.game.correct_ans),
+            button.button(colors.RED,big_font_size, self.width/2+25,row1_height,big_width,big_height,'Incorrect (n)', self.game.incorrect_ans),
             button.button(colors.BLUE,small_font_size,50,row2_height,small_height,small_width,'Reset (r)', self.game.reset),
             button.button(colors.YELLOW_GREEN,small_font_size, self.width/3+125,row2_height,small_height,small_width,'Yes Sound', Sounds.correct),
             button.button(colors.YELLOW_RED,small_font_size, self.width*2/3+50,row2_height,small_height,small_width,'No Sound', Sounds.incorrect),

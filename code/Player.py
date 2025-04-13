@@ -1,5 +1,6 @@
 import RPi.GPIO as gpio
 import neopixel
+import colors
 
 class Player():
     # light needs to be a board value and the rest are pins
@@ -14,11 +15,12 @@ class Player():
         gpio.output(self.button_light_pin, gpio.HIGH)
 
         self.light_strip = neopixel.NeoPixel(light_strip, 55, brightness=1)
-        
+        self.light_strip.fill((255,255,255))
         self.active = False
         self.disabled = False
 
     def change_light_strip_color(self, color):
+        print('color', color)
         self.light_strip.fill(color)
 
     def button_light_on(self):
