@@ -10,10 +10,10 @@ class Game():
         self.winners = ''
         #Setup pins and board
         self.players = [
-            Player.Player("Player 1",3,5,board.D16),
-            Player.Player("Player 2",23,6,board.D17),
+            Player.Player("Player 1",3,5,board.D10),
+            Player.Player("Player 2",23,6,board.D12),
             Player.Player("Player 3",24,7,board.D18),
-            Player.Player("Player 4",12,8,board.D19)
+            Player.Player("Player 4",12,8,board.D21)
         ]
         self.abort_thread = False
         self.steal_mode = True
