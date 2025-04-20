@@ -62,7 +62,7 @@ class Game():
 
     def button_clicked(self, player):
         player.active = True
-        Sounds.incorrect()
+        Sounds.buzzer()
         player.button_light_on()
         self.turn_light_on(player, 10)
 
