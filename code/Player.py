@@ -26,7 +26,14 @@ class Player():
 
     def change_light_strip_color(self, color):
         print(self.name, color)
-        self.light_strip.fill(color)
+        if(self.name == "Player 3"):
+            for i in range (0,30):
+                self.light_strip[i] = color;
+        elif(self.name == "Player 4"):
+            for i in range (31,60):
+                self.light_strip[i] = color;
+        else:
+            self.light_strip.fill(color)
 
     def button_light_on(self):
         gpio.output(self.button_light_pin, gpio.LOW)

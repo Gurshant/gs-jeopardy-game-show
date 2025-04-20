@@ -37,6 +37,7 @@ class ControlMenu():
             button.Button(colors.BLUE,small_font_size,50,row2_height,small_height,small_width,'Reset (r)', self.game.reset),
             button.Button(colors.YELLOW_GREEN,small_font_size, self.width/3+125,row2_height,small_height,small_width,'Yes Sound', Sounds.correct),
             button.Button(colors.YELLOW_RED,small_font_size, self.width*2/3+50,row2_height,small_height,small_width,'No Sound', Sounds.incorrect),
+            button.Button(colors.LIGHT_GREY,small_font_size, 50,row3_height,small_height,small_width,'Waiting State', self.game.waiting_state),
             button.Button(colors.RED,small_font_size, self.width*2/3+50,row3_height,small_height,small_width,'Quit (q)', self.quit_game)
         ]
         for b in self.buttons:

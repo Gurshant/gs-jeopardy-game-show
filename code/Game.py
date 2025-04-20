@@ -10,10 +10,10 @@ class Game():
         self.winners = ''
         #Setup pins and board
         self.players = [
-            Player.Player("Player 1", 15, 23, board.D21),
-            Player.Player("Player 2", 6, 9, board.D18),
+            Player.Player("Player 1", 15, 23, board.D18),
+            Player.Player("Player 2", 6, 9, board.D21),
             Player.Player("Player 3", 17, 26, board.D10),
-            #Player.Player("Player 4", 12, 8, board.D12)
+            Player.Player("Player 4", 4, 8, board.D10)
         ]
         self.abort_thread = False
         self.steal_mode = True
@@ -70,6 +70,7 @@ class Game():
         s_elapsed = 0
         while s_elapsed < seconds and not self.abort_thread:
             if seconds - s_elapsed < 5:
+                print("SET TO WHITE")
                 player.change_light_strip_color(colors.WHITE)
                 time.sleep(.25)
                 if not self.abort_thread:
@@ -78,6 +79,7 @@ class Game():
                 if seconds - s_elapsed <= .5:
                     self.incorrect_ans()
             else:
+                print("SET TO WHITE")
                 player.change_light_strip_color(colors.WHITE)
                 time.sleep(.5)
             s_elapsed += .5
@@ -86,7 +88,6 @@ class Game():
             print('thread aborted')
             self.abort_thread = False
             return
-            
 
     def reset_players(self):
         print('reset_players')
@@ -95,6 +96,14 @@ class Game():
             p.active = False
             p.button_light_off()
             p.change_light_strip_color(colors.BLACK)
+            
+    def waiting_state(self):
+        print('waiting state')
+        for p in self.players:
+            p.disabled = True
+            p.active = False
+            p.button_light_off()
+            p.change_light_strip_color(colors.WHITE)
 
     def incorrect_ans(self):
         print('incorrect')
