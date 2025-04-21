@@ -4,16 +4,24 @@ import Player
 import Sounds
 import board
 import colors
+import neopixel
 
 class Game():
     def __init__(self, steal_mode = False):
         self.winners = ''
         #Setup pins and board
+        
+        
+        strip_a = neopixel.NeoPixel(board.D18, 60, brightness=1)
+        strip_b = neopixel.NeoPixel(board.D21, 60, brightness=1)
+        strip_c = neopixel.NeoPixel(board.D10, 120, brightness=1)
+        
         self.players = [
-            Player.Player("Player 1", 15, 23, board.D18),
-            Player.Player("Player 2", 6, 9, board.D21),
-            Player.Player("Player 3", 17, 26, board.D10),
-            Player.Player("Player 4", 4, 8, board.D10)
+            #15 & 17 work #4,6,19 are bad
+            Player.Player("Player 1", 15, 23, strip_a, 0, 60),
+            Player.Player("Player 2", 11, 9, strip_b, 0, 60),
+            Player.Player("Player 3", 25, 20, strip_c, 0, 15),
+            Player.Player("Player 4", 17, 26, strip_c, 15,30)
         ]
         self.abort_thread = False
         self.steal_mode = True
@@ -47,7 +55,6 @@ class Game():
     def is_button_clicked(self, player):
         prior = player.current_state
         player.current_state = player.input_from_button()
-        
         if player.current_state == 0 and prior == 1 and not player.disabled:
             for th in threading.enumerate():
                 if th.name == 'light':
@@ -61,6 +68,7 @@ class Game():
         return False
 
     def button_clicked(self, player):
+        print('button_clicked', player.name)
         player.active = True
         Sounds.buzzer()
         player.button_light_on()
@@ -103,7 +111,7 @@ class Game():
             p.disabled = True
             p.active = False
             p.button_light_off()
-            p.change_light_strip_color(colors.WHITE)
+            p.change_light_strip_color(colors.YELLOW)
 
     def incorrect_ans(self):
         print('incorrect')

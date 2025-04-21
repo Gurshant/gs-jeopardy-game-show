@@ -1,10 +1,9 @@
 import RPi.GPIO as gpio
-import neopixel
 
 class Player():
     _gpio_initialized = False
 
-    def __init__(self, name, button_pin, button_light_pin, light_strip_board):
+    def __init__(self, name, button_pin, button_light_pin, light_strip, min_led, max_led):
         self._initialize_gpio()
 
         self.name = name
@@ -14,7 +13,11 @@ class Player():
         gpio.setup(self.button_pin, gpio.IN, pull_up_down=gpio.PUD_UP)
         gpio.setup(self.button_light_pin, gpio.OUT)
         gpio.output(self.button_light_pin, gpio.HIGH)
-        self.light_strip = neopixel.NeoPixel(light_strip_board, 55, brightness=1)
+        
+        self.light_strip = light_strip
+        self.min_led = min_led
+        self.max_led = max_led
+           
         self.current_state = 1
         self.active = False
         self.disabled = False
@@ -26,14 +29,16 @@ class Player():
 
     def change_light_strip_color(self, color):
         print(self.name, color)
-        if(self.name == "Player 3"):
-            for i in range (0,30):
+        #if(self.name == "Player 3"):
+            #for i in range (0,60):
+                #self.light_strip[i] = color;
+        #elif(self.name == "Player 4"):
+            #for i in range (60,120):
+                #self.light_strip[i] = color;
+        #else:
+            #self.light_strip.fill(color)
+        for i in range (self.min_led, self.max_led):
                 self.light_strip[i] = color;
-        elif(self.name == "Player 4"):
-            for i in range (31,60):
-                self.light_strip[i] = color;
-        else:
-            self.light_strip.fill(color)
 
     def button_light_on(self):
         gpio.output(self.button_light_pin, gpio.LOW)
