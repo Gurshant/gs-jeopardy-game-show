@@ -5,28 +5,30 @@ import Sounds
 import board
 import colors
 import neopixel
+from rpi_ws281x import PixelStrip, ws
 
 class Game():
     def __init__(self, steal_mode = False):
         self.winners = ''
         #Setup pins and board
-        
-        
-        strip_a = neopixel.NeoPixel(board.D18, 60, brightness=1)
-        strip_b = neopixel.NeoPixel(board.D21, 60, brightness=1)
-        strip_c = neopixel.NeoPixel(board.D10, 120, brightness=1)
+        strip_a = PixelStrip(30, 18, 1000000, 10, False, 255, 0, ws.WS2811_STRIP_GRB)
+        #strip_a = neopixel.NeoPixel(board.D18, 30, brightness=1)
+        strip_b = neopixel.NeoPixel(board.D21, 30, brightness=1)
+        strip_c = neopixel.NeoPixel(board.D10, 30, brightness=1)
+        strip_d = PixelStrip(30, 13, 800000, 10, False, 255, 1, ws.WS2811_STRIP_GRB)
+        strip_d.begin()
+        strip_a.begin()
         
         self.players = [
             #15 & 17 work #4,6,19 are bad
-            Player.Player("Player 1", 15, 23, strip_a, 0, 60),
-            Player.Player("Player 2", 11, 9, strip_b, 0, 60),
-            Player.Player("Player 3", 25, 20, strip_c, 0, 15),
-            Player.Player("Player 4", 17, 26, strip_c, 15,30)
+            Player.Player("P1", 15, 23, strip_a),
+            Player.Player("P2", 11, 9, strip_b),
+            Player.Player("P3", 25, 20, strip_c),
+            Player.Player("P4", 17, 26, strip_d)
         ]
         self.abort_thread = False
         self.steal_mode = True
         self.reset()
-        self.reset_players()
 
     def reset(self):
         self.abort_thread = True
