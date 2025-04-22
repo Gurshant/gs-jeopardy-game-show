@@ -20,7 +20,6 @@ class Game():
         strip_a.begin()
         
         self.players = [
-            #15 & 17 work #4,6,19 are bad
             Player.Player("P1", 15, 23, strip_a),
             Player.Player("P2", 11, 9, strip_b),
             Player.Player("P3", 25, 20, strip_c),

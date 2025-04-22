@@ -17,7 +17,6 @@ class Player():
         gpio.output(self.button_light_pin, gpio.HIGH)
         
         self.light_strip = light_strip
-           
         self.current_state = 1
         self.active = False
         self.disabled = False
