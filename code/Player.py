@@ -2,7 +2,7 @@ import RPi.GPIO as gpio
 from rpi_ws281x import Color
 import colors
 
-class Player():
+class player():
     _gpio_initialized = False
 
     def __init__(self, name, button_pin, button_light_pin, light_strip):

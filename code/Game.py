@@ -1,18 +1,17 @@
 import time
 import threading
-import Player
-import Sounds
+import player
+import sounds
 import board
 import colors
 import neopixel
 from rpi_ws281x import PixelStrip, ws
 
-class Game():
+class game():
     def __init__(self):
         self.winners = ''
         #Setup pins and board
         strip_a = PixelStrip(30, 18, 1000000, 10, False, 255, 0, ws.WS2811_STRIP_GRB)
-        #strip_a = neopixel.NeoPixel(board.D18, 30, brightness=1)
         strip_b = neopixel.NeoPixel(board.D21, 30, brightness=1)
         strip_c = neopixel.NeoPixel(board.D10, 30, brightness=1)
         strip_d = PixelStrip(30, 13, 800000, 10, False, 255, 1, ws.WS2811_STRIP_GRB)
@@ -20,10 +19,10 @@ class Game():
         strip_a.begin()
         
         self.players = [
-            Player.Player("P1", 15, 23, strip_a),
-            Player.Player("P2", 11, 9, strip_b),
-            Player.Player("P3", 25, 20, strip_c),
-            Player.Player("P4", 17, 26, strip_d)
+            player.player("P1", 15, 23, strip_a),
+            player.player("P2", 11, 9, strip_b),
+            player.player("P3", 25, 20, strip_c),
+            player.player("P4", 17, 26, strip_d)
         ]
         self.abort_thread = False
         self.steal_mode = True
@@ -47,7 +46,7 @@ class Game():
             time.sleep(1.5)
             self.reset()
     
-    def check(self):
+    def check_for_winner(self):
         for p in self.players:
             if self.is_button_clicked(p):
                 self.winners = p.name
@@ -71,7 +70,7 @@ class Game():
     def button_clicked(self, player):
         print('button_clicked', player.name)
         player.active = True
-        Sounds.buzzer()
+        sounds.buzzer()
         player.button_light_on()
         self.turn_light_on(player, 10)
 
@@ -79,7 +78,6 @@ class Game():
         s_elapsed = 0
         while s_elapsed < seconds and not self.abort_thread:
             if seconds - s_elapsed < 5:
-                print("SET TO WHITE")
                 player.change_light_strip_color(colors.WHITE)
                 time.sleep(.25)
                 if not self.abort_thread:
@@ -88,7 +86,6 @@ class Game():
                 if seconds - s_elapsed <= .5:
                     self.incorrect_ans()
             else:
-                print("SET TO WHITE")
                 player.change_light_strip_color(colors.WHITE)
                 time.sleep(.5)
             s_elapsed += .5
@@ -117,7 +114,7 @@ class Game():
     def incorrect_ans(self):
         print('incorrect')
         self.abort_thread = True
-        Sounds.incorrect()
+        sounds.incorrect()
         for p in self.players:
             print(p.name, p.active)
             if p.active:
@@ -131,7 +128,7 @@ class Game():
 
     def correct_ans(self):
         self.abort_thread = True
-        Sounds.correct()
+        sounds.correct()
         for p in self.players:
             print(p.name, p.active, p.disabled)
             if p.active and not p.disabled:
