@@ -8,7 +8,7 @@ import neopixel
 from rpi_ws281x import PixelStrip, ws
 
 class Game():
-    def __init__(self, steal_mode = False):
+    def __init__(self):
         self.winners = ''
         #Setup pins and board
         strip_a = PixelStrip(30, 18, 1000000, 10, False, 255, 0, ws.WS2811_STRIP_GRB)
@@ -139,11 +139,3 @@ class Game():
                 p.change_light_strip_color(colors.GREEN)
         time.sleep(1.5)
         self.reset()
-
-    def round_1(self):
-        print('Round 1 (Steal Mode)')
-        self.steal_mode = True
-
-    def round_2(self):
-        print('Round 2 (Speed )')
-        self.steal_mode = False
