@@ -25,7 +25,7 @@ class game():
             player.player("P4", 17, 26, strip_d)
         ]
         self.abort_thread = False
-        self.steal_mode = True
+        self.steal_mode = False
         self.reset()
 
     def reset(self):

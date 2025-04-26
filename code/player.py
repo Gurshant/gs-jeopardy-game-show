@@ -22,9 +22,9 @@ class player():
         self.disabled = False
 
     def _initialize_gpio(self):
-        if not Player._gpio_initialized:
+        if not player._gpio_initialized:
             gpio.setmode(gpio.BCM)
-            Player._gpio_initialized = True
+            player._gpio_initialized = True
 
     def change_light_strip_color(self, color):
         print(self.name, color)
